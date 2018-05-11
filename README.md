@@ -7,6 +7,29 @@
 Horovod is a distributed training framework for TensorFlow. The goal of Horovod is to make distributed Deep Learning
 fast and easy to use.
 
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [Why not traditional Distributed TensorFlow?](#why-not-traditional-distributed-tensorflow)
+- [Install](#install)
+- [Concepts](#concepts)
+- [Usage](#usage)
+- [Running Horovod](#running-horovod)
+- [Keras](#keras)
+- [Estimator API](#estimator-api)
+- [mpi4py](#mpi4py)
+- [Inference](#inference)
+- [Tensor Fusion](#tensor-fusion)
+- [Analyzing Horovod Performance](#analyzing-horovod-performance)
+- [Guides](#guides)
+- [Troubleshooting](#troubleshooting)
+- [Citation](#citation)
+- [Publications](#publications)
+- [References](#references)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 ## Why not traditional Distributed TensorFlow?
 
 The primary motivation for this project is to make it easy to take a single-GPU TensorFlow program and successfully train
@@ -18,12 +41,12 @@ it on many GPUs faster. This has two aspects:
 Internally at Uber we found the MPI model to be much more straightforward and require far less code changes than the
 Distributed TensorFlow with parameter servers. See the [Usage](#usage) section for more details.
 
-In addition to being easy to use, Horovod is fast. Below is a chart representing the benchmark that was done on 32
+In addition to being easy to use, Horovod is fast. Below is a chart representing the benchmark that was done on 128
 servers with 4 Pascal GPUs each connected by RoCE-capable 25 Gbit/s network:
   
-![128-GPU Benchmark](https://user-images.githubusercontent.com/16640218/31681220-7453e760-b32b-11e7-9ba3-6d01f83b7748.png)
+![512-GPU Benchmark](https://user-images.githubusercontent.com/16640218/38965607-bf5c46ca-4332-11e8-895a-b9c137e86013.png)
 
-Horovod achieves 90% scaling efficiency for both Inception V3 and ResNet-101, and 79% scaling efficiency for VGG-16.
+Horovod achieves 90% scaling efficiency for both Inception V3 and ResNet-101, and 68% scaling efficiency for VGG-16.
 See the [Benchmarks](docs/benchmarks.md) page to find out how to reproduce these numbers.
 
 While installing MPI and NCCL itself may seem like an extra hassle, it only needs to be done once by the team dealing
@@ -124,8 +147,7 @@ with tf.train.MonitoredTrainingSession(checkpoint_dir=checkpoint_dir,
 ## Running Horovod
 
 The example commands below show how to run distributed training. See the [Running Horovod](docs/running.md)
-page for more instructions, including RoCE/InfiniBand tweaks and tips for dealing with hangs. See the
-[Horovod in Docker](docs/docker.md) page for details about running Horovod in Docker.
+page for more instructions, including RoCE/InfiniBand tweaks and tips for dealing with hangs.
 
 1. To run on a machine with 4 GPUs:
 
@@ -148,6 +170,10 @@ $ mpirun -np 16 \
     -mca pml ob1 -mca btl ^openib \
     python train.py
 ```
+
+3. To run in Docker, see the [Horovod in Docker](docs/docker.md) page.
+
+4. To run in Kubernetes, see [Kubeflow](https://github.com/kubeflow/kubeflow/blob/master/kubeflow/openmpi/README.md).
 
 ## Keras
 
@@ -219,7 +245,7 @@ See [here](docs/timeline.md) for full details and usage instructions.
 See the [Troubleshooting](docs/troubleshooting.md) page and please submit the [ticket](https://github.com/uber/horovod/issues/new)
 if you can't find an answer.
 
-### Citation
+## Citation
 
 Please cite Horovod in your publications if it helps your research:
 
@@ -232,7 +258,7 @@ Please cite Horovod in your publications if it helps your research:
 }
 ```
 
-### Publications
+## Publications
 
 1. Sergeev, A., Del Balso, M. (2017) *Meet Horovod: Uber’s Open Source Distributed Deep Learning Framework for TensorFlow*.
 Retrieved from [https://eng.uber.com/horovod/](https://eng.uber.com/horovod/)
@@ -240,7 +266,7 @@ Retrieved from [https://eng.uber.com/horovod/](https://eng.uber.com/horovod/)
 [https://www.slideshare.net/AlexanderSergeev4/horovod-distributed-tensorflow-made-easy](https://www.slideshare.net/AlexanderSergeev4/horovod-distributed-tensorflow-made-easy)
 3. Sergeev, A., Del Balso, M. (2018) *Horovod: fast and easy distributed deep learning in TensorFlow*. [arXiv:1802.05799](https://arxiv.org/abs/1802.05799)
 
-### References
+## References
 
 The Horovod source code was based off the Baidu [tensorflow-allreduce](https://github.com/baidu-research/tensorflow-allreduce)
 repository written by Andrew Gibiansky and Joel Hestness. Their original work is described in the article
